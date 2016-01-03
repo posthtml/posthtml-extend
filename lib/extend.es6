@@ -12,24 +12,19 @@ const errors = {
 
 export default (options = {}) => {
     return tree => {
-        return extend(tree, options);
+        options.encoding = options.encoding || 'utf8';
+        options.root = options.root || './';
+
+        tree = handleExtendsNodes(tree, options);
+
+        const blockNodes = getBlockNodes(tree);
+        for (let blockName of Object.keys(blockNodes)) {
+            blockNodes[blockName].tag = false;
+        }
+
+        return tree;
     };
 };
-
-
-function extend(tree, options) {
-    options.encoding = options.encoding || 'utf8';
-    options.root = options.root || './';
-
-    tree = handleExtendsNodes(tree, options);
-
-    const blockNodes = getBlockNodes(tree);
-    for (let blockName of Object.keys(blockNodes)) {
-        blockNodes[blockName].tag = false;
-    }
-
-    return tree;
-}
 
 
 function handleExtendsNodes(tree, options) {
