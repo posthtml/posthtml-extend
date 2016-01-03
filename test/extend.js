@@ -92,23 +92,24 @@ describe('Extend', () => {
     });
 
 
-    it('should extend layout and prepend content', () => {
+    it('should append and prepend content', () => {
         mfs.writeFileSync('./layout.html', `
             <head><block name="head"><style></style></block></head>
             <body><block name="body">body</block></body>
-            <footer><block name="footer">footer</block></footer>
+            <footer><block name="footer">2015</block></footer>
         `);
 
         return init(`
             <extends src="layout.html">
                 <block name="head" type="prepend"><title>hello!</title></block>
                 <block name="body">Some body content</block>
+                <block name="footer" type="append">—2016</block>
             </extends>
         `).then(html => {
             expect(html).toBe(cleanHtml(`
                 <head><title>hello!</title><style></style></head>
                 <body>Some body content</body>
-                <footer>footer</footer>
+                <footer>2015—2016</footer>
             `));
         });
     });

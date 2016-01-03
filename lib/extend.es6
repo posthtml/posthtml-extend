@@ -78,12 +78,16 @@ function mergeContent(extendBlockContent, layoutBlockContent, extendBlockType) {
     layoutBlockContent = layoutBlockContent || [];
 
     switch (extendBlockType) {
+        case 'replace':
+            layoutBlockContent = extendBlockContent;
+            break;
+
         case 'prepend':
             layoutBlockContent = extendBlockContent.concat(layoutBlockContent);
             break;
 
-        case 'replace':
-            layoutBlockContent = extendBlockContent;
+        case 'append':
+            layoutBlockContent = layoutBlockContent.concat(extendBlockContent);
             break;
     }
 
@@ -94,7 +98,7 @@ function mergeContent(extendBlockContent, layoutBlockContent, extendBlockType) {
 function getBlockType(blockNode) {
     let blockType = (blockNode.attrs && blockNode.attrs.type) || '';
     blockType = blockType.toLowerCase();
-    if (['replace', 'prepend'].indexOf(blockType) === -1) {
+    if (['replace', 'prepend', 'append'].indexOf(blockType) === -1) {
         blockType = 'replace';
     }
 
