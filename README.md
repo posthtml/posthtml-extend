@@ -11,7 +11,8 @@ Let's say we have two parent templates:
 `head.html`
 ```html
 <head>
-    <title><block name="title"></block></title>
+    <block name="meta"><meta charset="utf-8"></block>
+    <title><block name="title"> — Github</block></title>
 </head>
 ```
 
@@ -28,12 +29,13 @@ Let's say we have two parent templates:
 </body>
 ```
 
-Now we can extend they:
+Now we can extend they and replace, prepend, or append default block's content:
 ```js
 var posthtml = require('posthtml');
 var html = '<html>' +
                '<extends src="head.html">' +
-                   '<block name="title">How to use posthtml-extend</block>' +
+                   '<block name="title" type="prepend">How to use posthtml-extend</block>' +
+                   '<block name="meta" type="append"><meta name="robots" content="index, follow"></block>' +
                '</extends>' +
                '<extends src="body.html">' +
                    '<block name="content">See README.md</block>' +
@@ -49,7 +51,8 @@ posthtml([require('posthtml-extend')({
 
 // <html>
 //     <head>
-//         <title>How to use posthtml-extend</title>
+//         <meta charset="utf-8"><meta name="robots" content="index, follow">
+//         <title>How to use posthtml-extend — Github</title>
 //     </head>
 //     <body>
 //         <div class="content">See README.md</div>
