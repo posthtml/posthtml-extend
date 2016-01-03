@@ -92,6 +92,28 @@ describe('Extend', () => {
     });
 
 
+    it('should extend layout and prepend content', () => {
+        mfs.writeFileSync('./layout.html', `
+            <head><block name="head"><style></style></block></head>
+            <body><block name="body">body</block></body>
+            <footer><block name="footer">footer</block></footer>
+        `);
+
+        return init(`
+            <extends src="layout.html">
+                <block name="head" type="prepend"><title>hello!</title></block>
+                <block name="body">Some body content</block>
+            </extends>
+        `).then(html => {
+            expect(html).toBe(cleanHtml(`
+                <head><title>hello!</title><style></style></head>
+                <body>Some body content</body>
+                <footer>footer</footer>
+            `));
+        });
+    });
+
+
     it('should remove unexpected content from <extends>', () => {
         mfs.writeFileSync('./layout.html', '<block name="content"></block>');
 

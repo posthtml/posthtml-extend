@@ -55,12 +55,19 @@ function mergeExtendsAndLayout(layoutTree, extendsNode) {
     const extendsBlockNodes = getBlockNodes(extendsNode.content);
 
     for (let layoutBlockName of Object.keys(layoutBlockNodes)) {
-        let layoutBlockNode = layoutBlockNodes[layoutBlockName];
         let extendsBlockNode = extendsBlockNodes[layoutBlockName];
-        if (extendsBlockNode) {
-            layoutBlockNode.content = extendsBlockNode.content;
-            delete extendsBlockNodes[layoutBlockName];
+        if (! extendsBlockNode) {
+            continue;
         }
+
+        let layoutBlockNode = layoutBlockNodes[layoutBlockName];
+        layoutBlockNode.content = mergeContent(
+            extendsBlockNode.content,
+            layoutBlockNode.content,
+            getBlockType(extendsBlockNode)
+        );
+
+        delete extendsBlockNodes[layoutBlockName];
     }
 
     for (let extendsBlockName of Object.keys(extendsBlockNodes)) {
@@ -68,6 +75,35 @@ function mergeExtendsAndLayout(layoutTree, extendsNode) {
     }
 
     return layoutTree;
+}
+
+
+function mergeContent(extendBlockContent, layoutBlockContent, extendBlockType) {
+    extendBlockContent = extendBlockContent || [];
+    layoutBlockContent = layoutBlockContent || [];
+
+    switch (extendBlockType) {
+        case 'prepend':
+            layoutBlockContent = extendBlockContent.concat(layoutBlockContent);
+            break;
+
+        case 'replace':
+            layoutBlockContent = extendBlockContent;
+            break;
+    }
+
+    return layoutBlockContent;
+}
+
+
+function getBlockType(blockNode) {
+    let blockType = (blockNode.attrs && blockNode.attrs.type) || '';
+    blockType = blockType.toLowerCase();
+    if (['replace', 'prepend'].indexOf(blockType) === -1) {
+        blockType = 'replace';
+    }
+
+    return blockType;
 }
 
 
