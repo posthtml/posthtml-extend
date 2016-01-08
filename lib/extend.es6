@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import util from 'util';
 import parseToPostHtml from 'posthtml-parser';
+import { match } from 'posthtml/lib/api';
+
 
 const errors = {
     'EXTENDS_NO_SRC': '<extends> has no "src"',
@@ -28,7 +30,7 @@ export default (options = {}) => {
 
 
 function handleExtendsNodes(tree, options) {
-    getNodes(tree, 'extends').forEach(extendsNode => {
+    match.call(tree, {tag: 'extends'}, extendsNode => {
         if (! extendsNode.attrs || ! extendsNode.attrs.src) {
             throw getError(errors.EXTENDS_NO_SRC);
         }
@@ -39,6 +41,8 @@ function handleExtendsNodes(tree, options) {
 
         extendsNode.tag = false;
         extendsNode.content = mergeExtendsAndLayout(layoutTree, extendsNode);
+
+        return extendsNode;
     });
 
     return tree;
@@ -109,29 +113,16 @@ function getBlockType(blockNode) {
 function getBlockNodes(content = []) {
     let blockNodes = {};
 
-    getNodes(content, 'block').forEach(node => {
+    match.call(content, {tag: 'block'}, node => {
         if (! node.attrs || ! node.attrs.name) {
             throw getError(errors.BLOCK_NO_NAME);
         }
 
         blockNodes[node.attrs.name] = node;
+        return node;
     });
 
     return blockNodes;
-}
-
-
-function getNodes(content = [], filterTag) {
-    let nodes = [];
-    content.forEach(node => {
-        if (node.tag && (! filterTag || node.tag === filterTag)) {
-            nodes.push(node);
-        } else if (node.content) {
-            nodes = nodes.concat(getNodes(node.content, filterTag));
-        }
-    });
-
-    return nodes;
 }
 
 
