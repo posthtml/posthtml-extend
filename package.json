@@ -27,6 +27,7 @@
     ]
   },
   "dependencies": {
+    "posthtml": "^0.8.1",
     "posthtml-parser": "^0.1.1"
   },
   "devDependencies": {
@@ -38,7 +39,6 @@
     "eslint": "^1.10.3",
     "expect": "^1.13.4",
     "mocha": "^2.3.4",
-    "posthtml": "^0.8.0",
     "proxyquire": "^1.7.3"
   },
   "repository": {
