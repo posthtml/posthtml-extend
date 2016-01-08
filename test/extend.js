@@ -38,11 +38,14 @@ describe('Extend', () => {
         mfs.writeFileSync('./layout.html', `
             <head><block name="head">head</block></head>
             <body><block name="body">body</block></body>
+            <sidebar><block name="sidebar"></block></sidebar>
+            <div><block name="ad">ad</block></div>
             <footer><block name="footer">footer</block></footer>
         `);
 
         return init(`
             <extends src="layout.html">
+                <block name="ad"></block>
                 <block name="head"><title>hello world!</title></block>
                 <block name="body">Some body content</block>
             </extends>
@@ -50,6 +53,8 @@ describe('Extend', () => {
             expect(html).toBe(cleanHtml(`
                 <head><title>hello world!</title></head>
                 <body>Some body content</body>
+                <sidebar></sidebar>
+                <div></div>
                 <footer>footer</footer>
             `));
         });

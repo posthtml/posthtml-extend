@@ -21,7 +21,10 @@ export default (options = {}) => {
 
         const blockNodes = getBlockNodes(tree);
         for (let blockName of Object.keys(blockNodes)) {
-            blockNodes[blockName].tag = false;
+            let blockNode = blockNodes[blockName];
+            blockNode.tag = false;
+            blockNode.content = blockNode.content || [];
+            blockNodes[blockName] = blockNode;
         }
 
         return tree;
