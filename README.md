@@ -2,45 +2,43 @@
 [![npm version](https://badge.fury.io/js/posthtml-extend.svg)](http://badge.fury.io/js/posthtml-extend)
 [![Build Status](https://travis-ci.org/maltsev/posthtml-extend.svg?branch=master)](https://travis-ci.org/maltsev/posthtml-extend)
 
-[PostHTML](https://github.com/posthtml/posthtml) plugin that allows a template to extend another templates (Jade-like).
+[PostHTML](https://github.com/posthtml/posthtml) plugin that allows a template to extend (inherit) another templates ([Jade-like](http://jade-lang.com/reference/inheritance/)).
 
 
 ## Usage
-Let's say we have two parent templates:
+Let's say we have a base template:
 
-`head.html`
+`base.html`
 ```html
-<head>
-    <block name="meta"><meta charset="utf-8"></block>
-    <title><block name="title"> — Github</block></title>
-</head>
+<html>
+    <head>
+        <title><block name="title"> — Github</block></title>
+    </head>
+
+    <body>
+        <div class="content">
+           <block name="content"></block>
+        </div>
+
+        <footer>
+            <block name="footer">footer content</block>
+        </footer>
+    </body>
+</html>
 ```
 
-`body.html`
-```html
-<body>
-    <div class="content">
-       <block name="content"></block>
-    </div>
+Now we can inherit this template. All defined blocks inside `<extends>` will
+replace the blocks with the same name in the parent template. If the block is not
+defined inside `<extends>` its content in the parent template remains the same.
 
-    <footer>
-        <block name="footer">footer</block>
-    </fotter>
-</body>
-```
-
-Now we can extend they and replace, prepend, or append default block's content:
+In the example the blocks `title` and `content` will be replaced and
+the block `footer` will remain unchanged:
 ```js
 var posthtml = require('posthtml');
-var html = '<html>' +
-               '<extends src="head.html">' +
-                   '<block name="title" type="prepend">How to use posthtml-extend</block>' +
-                   '<block name="meta" type="append"><meta name="robots" content="index, follow"></block>' +
-               '</extends>' +
-               '<extends src="body.html">' +
-                   '<block name="content">See README.md</block>' +
-               '</extends>' +
-           '</html>';
+var html = '<extends src="base.html">' +
+               '<block name="title">How to use posthtml-extend</block>' +
+               '<block name="content">Read the documentation</block>'
+           '</extends>';
 
 posthtml([require('posthtml-extend')({
     encoding: 'utf8', // Parent template encoding (default: 'utf8')
@@ -51,12 +49,38 @@ posthtml([require('posthtml-extend')({
 
 // <html>
 //     <head>
-//         <meta charset="utf-8"><meta name="robots" content="index, follow">
+//         <title>How to use posthtml-extend</title>
+//     </head>
+//
+//     <body>
+//         <div class="content">Read the documentation</div>
+//         <footer>footer content</footer>
+//     </body>
+// </html>
+```
+
+
+It's also possible to append and prepend block's content:
+```js
+var posthtml = require('posthtml');
+var html = '<extends src="base.html">' +
+               '<block name="title" type="prepend">How to use posthtml-extend</block>' +
+               '<block name="content">Read the documentation</block>' +
+               '<block name="footer" type="append">— 2016</block>'
+           '</extends>';
+
+posthtml([require('posthtml-extend')()]).process(html).then(function (result) {
+    console.log(result.html);
+});
+
+// <html>
+//     <head>
 //         <title>How to use posthtml-extend — Github</title>
 //     </head>
+//
 //     <body>
-//         <div class="content">See README.md</div>
-//         <footer>footer</footer>
+//         <div class="content">Read the documentation</div>
+//         <footer>footer content — 2016</footer>
 //     </body>
 // </html>
 ```
