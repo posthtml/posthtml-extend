@@ -19,7 +19,6 @@ Let's say we have a base template:
         <div class="content">
            <block name="content"></block>
         </div>
-
         <footer>
             <block name="footer">footer content</block>
         </footer>
@@ -46,20 +45,24 @@ posthtml([require('posthtml-extend')({
 })]).process(html).then(function (result) {
     console.log(result.html);
 });
+```
 
-// <html>
-//     <head>
-//         <title>How to use posthtml-extend</title>
-//     </head>
-//
-//     <body>
-//         <div class="content">Read the documentation</div>
-//         <footer>footer content</footer>
-//     </body>
-// </html>
+The final HTML will be:
+```html
+<html>
+    <head>
+        <title>How to use posthtml-extend</title>
+    </head>
+
+    <body>
+        <div class="content">Read the documentation</div>
+        <footer>footer content</footer>
+    </body>
+</html>
 ```
 
 
+### Append/prepend
 It's also possible to append and prepend block's content:
 ```js
 var posthtml = require('posthtml');
@@ -72,15 +75,17 @@ var html = '<extends src="base.html">' +
 posthtml([require('posthtml-extend')()]).process(html).then(function (result) {
     console.log(result.html);
 });
+```
 
-// <html>
-//     <head>
-//         <title>How to use posthtml-extend — Github</title>
-//     </head>
-//
-//     <body>
-//         <div class="content">Read the documentation</div>
-//         <footer>footer content — 2016</footer>
-//     </body>
-// </html>
+The final HTML will be:
+```html
+<html>
+    <head>
+        <title>How to use posthtml-extend — Github</title>
+    </head>
+    <body>
+        <div class="content">Read the documentation</div>
+        <footer>footer content — 2016</footer>
+    </body>
+</html>
 ```
