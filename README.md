@@ -1,4 +1,4 @@
-# posthtml-extend [![npm version](https://badge.fury.io/js/posthtml-extend.svg)](http://badge.fury.io/js/posthtml-extend) [![Build Status](https://travis-ci.org/maltsev/posthtml-extend.svg?branch=master)](https://travis-ci.org/maltsev/posthtml-extend)
+# posthtml-extend [![npm version](https://badge.fury.io/js/posthtml-extend.svg)](http://badge.fury.io/js/posthtml-extend) [![Build Status](https://travis-ci.org/posthtml/posthtml-extend.svg?branch=master)](https://travis-ci.org/posthtml/posthtml-extend)
 
 [PostHTML](https://github.com/posthtml/posthtml) plugin that allows a template to extend (inherit) another templates ([Jade-like](http://jade-lang.com/reference/inheritance/)).
 

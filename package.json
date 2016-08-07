@@ -43,10 +43,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/maltsev/posthtml-extend.git"
+    "url": "git://github.com/posthtml/posthtml-extend.git"
   },
   "bugs": {
-    "url": "https://github.com/maltsev/posthtml-extend/issues"
+    "url": "https://github.com/posthtml/posthtml-extend/issues"
   },
-  "homepage": "https://github.com/maltsev/posthtml-extend"
+  "homepage": "https://github.com/posthtml/posthtml-extend"
 }
