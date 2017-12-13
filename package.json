@@ -8,7 +8,7 @@
   "scripts": {
     "compile": "rm -f lib/*.js && node_modules/.bin/babel -d lib/ lib/",
     "lint": "node_modules/.bin/eslint *.js lib/*.es6 test/",
-    "pretest": "npm run lint && npm run compile",
+    "pretest": "npm run compile",
     "test": "node_modules/.bin/_mocha --compilers js:babel-core/register --check-leaks",
     "prepublish": "npm run compile"
   },
@@ -39,6 +39,7 @@
     "eslint": "^1.10.3",
     "expect": "^1.13.4",
     "mocha": "^2.3.4",
+    "posthtml-expressions": "^1.1.0",
     "proxyquire": "^1.7.3"
   },
   "repository": {
