@@ -87,3 +87,41 @@ The final HTML will be:
     </body>
 </html>
 ```
+
+### Plugins
+In the example the will be replaced call plugins after `extend`
+
+```js
+var posthtml = require('posthtml');
+var options = {
+    plugins: [
+        require('posthtml-expressions')({ locals: { foo: 'bar'} })
+    ]
+};
+var html = `<extends src="base.html">
+      <if condition="foo === 'bar'">
+        <block name="content">content value foo equal bar</block>
+      </if>
+
+      <if condition="foo !== 'bar'">
+          <block name="content"> value foo not equal bar</block>
+      </if>
+  </extends>`;
+
+posthtml([require('posthtml-extend')(options)]).process(html).then(function (result) {
+    console.log(result.html);
+});
+```
+
+The final HTML will be:
+```html
+<html>
+    <head>
+        <title>How to use posthtml-extend — Github</title>
+    </head>
+    <body>
+        <div class="content">content value foo equal bar</div>
+        <footer>footer content — 2016</footer>
+    </body>
+</html>
+```
