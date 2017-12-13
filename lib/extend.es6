@@ -16,6 +16,7 @@ export default (options = {}) => {
     return tree => {
         options.encoding = options.encoding || 'utf8';
         options.root = options.root || './';
+        options.plugins = options.plugins || [];
 
         tree = handleExtendsNodes(tree, options);
 
@@ -33,14 +34,14 @@ export default (options = {}) => {
 
 
 function handleExtendsNodes(tree, options) {
-    match.call(tree, {tag: 'extends'}, extendsNode => {
+    match.call(applyPluginsToTree(tree, options.plugins), {tag: 'extends'}, extendsNode => {
         if (! extendsNode.attrs || ! extendsNode.attrs.src) {
             throw getError(errors.EXTENDS_NO_SRC);
         }
 
         const layoutPath = path.resolve(options.root, extendsNode.attrs.src);
         const layoutHtml = fs.readFileSync(layoutPath, options.encoding);
-        let layoutTree = handleExtendsNodes(parseToPostHtml(layoutHtml), options);
+        let layoutTree = handleExtendsNodes(applyPluginsToTree(parseToPostHtml(layoutHtml), options.plugins), options);
 
         extendsNode.tag = false;
         extendsNode.content = mergeExtendsAndLayout(layoutTree, extendsNode);
@@ -49,6 +50,10 @@ function handleExtendsNodes(tree, options) {
     });
 
     return tree;
+}
+
+function applyPluginsToTree(tree, plugins) {
+    return plugins.reduce((tree, plugin) => tree = plugin(tree), tree);
 }
 
 
