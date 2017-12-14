@@ -82,7 +82,7 @@ describe('Extend', () => {
                 </if>
             </extends>
         `, options).then(html => {
-            expect(html).toBe(cleanHtml(`content value foo equal bar`));
+            expect(html).toBe(cleanHtml('content value foo equal bar'));
         });
     });
 
