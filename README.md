@@ -89,7 +89,8 @@ The final HTML will be:
 ```
 
 ### Plugins
-In the example the will be replaced call plugins after `extend`
+You can also include [other PostHTML plugins](http://posthtml.github.io/posthtml-plugins/) in your templates.
+Here is an example of using [posthtml-expressions](https://github.com/posthtml/posthtml-expressions), which allows to use variables and conditions:
 
 ```js
 var posthtml = require('posthtml');
