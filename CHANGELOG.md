@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.2.0] - 2017-12-13
 ### Added
-- Plugins options - call you plugins after extend.
+- Plugins options - call your plugins after extend.
 
 
 ## [0.1.2] - 2016-01-09
