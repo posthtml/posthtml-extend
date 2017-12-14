@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.2.0] - 2017-12-13
+### Added
+- Plugins options - call you plugins after extend.
+
 
 ## [0.1.2] - 2016-01-09
 ### Fixed

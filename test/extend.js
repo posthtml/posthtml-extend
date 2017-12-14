@@ -60,6 +60,32 @@ describe('Extend', () => {
         });
     });
 
+    it('should extend layout with plugin', () => {
+        mfs.writeFileSync('./layout.html', `
+            <block name="content"></block>
+        `);
+
+        const options = {
+            plugins: [
+                require('posthtml-expressions')({ locals: { foo: 'bar'} })
+            ]
+        };
+
+        return init(`
+            <extends src="layout.html">
+                <if condition="foo === 'bar'">
+                  <block name="content">content value foo equal bar</block>
+                </if>
+
+                <if condition="foo !== 'bar'">
+                    <block name="content"> value foo not equal bar</block>
+                </if>
+            </extends>
+        `, options).then(html => {
+            expect(html).toBe(cleanHtml(`content value foo equal bar`));
+        });
+    });
+
 
     it('should extend inherited layout', () => {
         mfs.writeFileSync('./base.html', `

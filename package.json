@@ -39,6 +39,7 @@
     "eslint": "^1.10.3",
     "expect": "^1.13.4",
     "mocha": "^2.3.4",
+    "posthtml-expressions": "^1.1.0",
     "proxyquire": "^1.7.3"
   },
   "repository": {
