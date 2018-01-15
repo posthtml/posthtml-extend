@@ -41,8 +41,14 @@ function handleExtendsNodes(tree, options) {
 
         const layoutPath = path.resolve(options.root, extendsNode.attrs.src);
         const layoutHtml = fs.readFileSync(layoutPath, options.encoding);
-        let layoutTree = handleExtendsNodes(applyPluginsToTree(parseToPostHtml(layoutHtml), options.plugins), options);
+        let layoutTree;
 
+        tree.messages.push({
+            type: 'dependency',
+            file: layoutPath,
+            from: tree.options.from
+        });
+        layoutTree = handleExtendsNodes(applyPluginsToTree(parseToPostHtml(layoutHtml), options.plugins), options);
         extendsNode.tag = false;
         extendsNode.content = mergeExtendsAndLayout(layoutTree, extendsNode);
 
