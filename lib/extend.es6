@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import util from 'util';
 import parseToPostHtml from 'posthtml-parser';
-import * as api from  'posthtml/lib/api';
+import * as api from 'posthtml/lib/api';
 
 
 const errors = {
