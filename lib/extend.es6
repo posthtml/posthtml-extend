@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import util from 'util';
 import parseToPostHtml from 'posthtml-parser';
-import { match } from 'posthtml/lib/api';
+import * as api from  'posthtml/lib/api';
 
 
 const errors = {
@@ -34,7 +34,7 @@ export default (options = {}) => {
 
 
 function handleExtendsNodes(tree, options) {
-    match.call(applyPluginsToTree(tree, options.plugins), {tag: 'extends'}, extendsNode => {
+    api.match.call(applyPluginsToTree(tree, options.plugins), {tag: 'extends'}, extendsNode => {
         if (! extendsNode.attrs || ! extendsNode.attrs.src) {
             throw getError(errors.EXTENDS_NO_SRC);
         }
@@ -42,6 +42,14 @@ function handleExtendsNodes(tree, options) {
         const layoutPath = path.resolve(options.root, extendsNode.attrs.src);
         const layoutHtml = fs.readFileSync(layoutPath, options.encoding);
         let layoutTree;
+
+        if (!tree.messages) {
+            apiExtend(tree);
+        }
+
+        if (!tree.options) {
+            tree.options = {};
+        }
 
         tree.messages.push({
             type: 'dependency',
@@ -127,7 +135,7 @@ function getBlockType(blockNode) {
 function getBlockNodes(content = []) {
     let blockNodes = {};
 
-    match.call(content, {tag: 'block'}, node => {
+    api.match.call(content, {tag: 'block'}, node => {
         if (! node.attrs || ! node.attrs.name) {
             throw getError(errors.BLOCK_NO_NAME);
         }
@@ -143,4 +151,10 @@ function getBlockNodes(content = []) {
 function getError() {
     const message = util.format.apply(util, arguments);
     return new Error('[posthtml-extend] ' + message);
+}
+
+function apiExtend(tree) {
+    tree.walk = api.walk;
+    tree.match = api.match;
+    tree.messages = api.messages;
 }
