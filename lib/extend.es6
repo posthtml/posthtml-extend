@@ -2,8 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import util from 'util';
 import parseToPostHtml from 'posthtml-parser';
-import * as api from 'posthtml/lib/api';
-
+import Api from 'posthtml/lib/api';
 
 const errors = {
     'EXTENDS_NO_SRC': '<extends> has no "src"',
@@ -32,8 +31,17 @@ export default (options = {}) => {
     };
 };
 
+const api = new Api;
+let baseFileOpts;
 
 function handleExtendsNodes(tree, options) {
+    baseFileOpts = baseFileOpts || tree.options;
+    tree.options = tree.options || baseFileOpts;
+
+    if (!tree.messages) {
+        tree.messages = [];
+    }
+
     api.match.call(applyPluginsToTree(tree, options.plugins), {tag: 'extends'}, extendsNode => {
         if (! extendsNode.attrs || ! extendsNode.attrs.src) {
             throw getError(errors.EXTENDS_NO_SRC);
@@ -42,14 +50,6 @@ function handleExtendsNodes(tree, options) {
         const layoutPath = path.resolve(options.root, extendsNode.attrs.src);
         const layoutHtml = fs.readFileSync(layoutPath, options.encoding);
         let layoutTree;
-
-        if (!tree.messages) {
-            apiExtend(tree);
-        }
-
-        if (!tree.options) {
-            tree.options = {};
-        }
 
         tree.messages.push({
             type: 'dependency',
@@ -151,10 +151,4 @@ function getBlockNodes(content = []) {
 function getError() {
     const message = util.format.apply(util, arguments);
     return new Error('[posthtml-extend] ' + message);
-}
-
-function apiExtend(tree) {
-    tree.walk = api.walk;
-    tree.match = api.match;
-    tree.messages = api.messages;
 }
