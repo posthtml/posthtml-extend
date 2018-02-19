@@ -55,8 +55,6 @@ function handleExtendsNodes(tree, options, messages) {
         return extendsNode;
     });
 
-    //console.log(tree);
-
     return tree;
 }
 
