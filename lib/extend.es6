@@ -10,14 +10,13 @@ const errors = {
     'UNEXPECTED_BLOCK': 'Unexpected block "%s"'
 };
 
-
 export default (options = {}) => {
     return tree => {
         options.encoding = options.encoding || 'utf8';
         options.root = options.root || './';
         options.plugins = options.plugins || [];
 
-        tree = handleExtendsNodes(tree, options);
+        tree = handleExtendsNodes(tree, options, tree.messages);
 
         const blockNodes = getBlockNodes(tree);
         for (let blockName of Object.keys(blockNodes)) {
@@ -31,17 +30,9 @@ export default (options = {}) => {
     };
 };
 
-const api = new Api;
-let baseFileOpts;
+const api = new Api();
 
-function handleExtendsNodes(tree, options) {
-    baseFileOpts = baseFileOpts || tree.options;
-    tree.options = tree.options || baseFileOpts;
-
-    if (!tree.messages) {
-        tree.messages = [];
-    }
-
+function handleExtendsNodes(tree, options, messages) {
     api.match.call(applyPluginsToTree(tree, options.plugins), {tag: 'extends'}, extendsNode => {
         if (! extendsNode.attrs || ! extendsNode.attrs.src) {
             throw getError(errors.EXTENDS_NO_SRC);
@@ -49,19 +40,22 @@ function handleExtendsNodes(tree, options) {
 
         const layoutPath = path.resolve(options.root, extendsNode.attrs.src);
         const layoutHtml = fs.readFileSync(layoutPath, options.encoding);
-        let layoutTree;
+        let layoutTree;        
 
-        tree.messages.push({
-            type: 'dependency',
-            file: layoutPath,
-            from: tree.options.from
-        });
-        layoutTree = handleExtendsNodes(applyPluginsToTree(parseToPostHtml(layoutHtml), options.plugins), options);
+        layoutTree = handleExtendsNodes(applyPluginsToTree(parseToPostHtml(layoutHtml), options.plugins), options, messages);
         extendsNode.tag = false;
         extendsNode.content = mergeExtendsAndLayout(layoutTree, extendsNode);
 
+        messages.push({
+            type: 'dependency',
+            file: layoutPath,
+            from: options.from
+        });
+
         return extendsNode;
     });
+
+    //console.log(tree);
 
     return tree;
 }
