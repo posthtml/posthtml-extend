@@ -209,16 +209,20 @@ describe('Messages', () => {
             <body><block name="body">body</block></body>
         `);
 
-        return init(`
-            <extends src="layout.html">
-                <block name="head"><title>hello world!</title></block>
-                <block name="body">Some body content</block>
-            </extends>
-        `, {}, (result) => expect(result).toEqual({
+        return init(
+            `
+                <extends src="layout.html">
+                    <block name="head"><title>hello world!</title></block>
+                    <block name="body">Some body content</block>
+                </extends>
+            `,
+            {},
+            (result) => expect(result).toEqual({
                 html: result.html,
                 tree: result.tree,
                 messages: result.messages
-            }));
+            })
+        );
 
     });
 
