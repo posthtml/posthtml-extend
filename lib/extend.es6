@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import util from 'util';
 import parseToPostHtml from 'posthtml-parser';
-import Api from 'posthtml/lib/api';
+import { match } from 'posthtml/lib/api';
 
 const errors = {
     'EXTENDS_NO_SRC': '<extends> has no "src"',
@@ -33,7 +33,7 @@ export default (options = {}) => {
 const api = new Api();
 
 function handleExtendsNodes(tree, options, messages) {
-    api.match.call(applyPluginsToTree(tree, options.plugins), {tag: 'extends'}, extendsNode => {
+    match.call(applyPluginsToTree(tree, options.plugins), {tag: 'extends'}, extendsNode => {
         if (! extendsNode.attrs || ! extendsNode.attrs.src) {
             throw getError(errors.EXTENDS_NO_SRC);
         }
@@ -125,7 +125,7 @@ function getBlockType(blockNode) {
 function getBlockNodes(content = []) {
     let blockNodes = {};
 
-    api.match.call(content, {tag: 'block'}, node => {
+    match.call(content, {tag: 'block'}, node => {
         if (! node.attrs || ! node.attrs.name) {
             throw getError(errors.BLOCK_NO_NAME);
         }
