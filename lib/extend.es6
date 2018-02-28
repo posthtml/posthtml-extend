@@ -4,13 +4,11 @@ import util from 'util';
 import parseToPostHtml from 'posthtml-parser';
 import { match } from 'posthtml/lib/api';
 
-
 const errors = {
     'EXTENDS_NO_SRC': '<extends> has no "src"',
     'BLOCK_NO_NAME': '<block> has no "name"',
     'UNEXPECTED_BLOCK': 'Unexpected block "%s"'
 };
-
 
 export default (options = {}) => {
     return tree => {
@@ -18,7 +16,7 @@ export default (options = {}) => {
         options.root = options.root || './';
         options.plugins = options.plugins || [];
 
-        tree = handleExtendsNodes(tree, options);
+        tree = handleExtendsNodes(tree, options, tree.messages);
 
         const blockNodes = getBlockNodes(tree);
         for (let blockName of Object.keys(blockNodes)) {
@@ -32,8 +30,7 @@ export default (options = {}) => {
     };
 };
 
-
-function handleExtendsNodes(tree, options) {
+function handleExtendsNodes(tree, options, messages) {
     match.call(applyPluginsToTree(tree, options.plugins), {tag: 'extends'}, extendsNode => {
         if (! extendsNode.attrs || ! extendsNode.attrs.src) {
             throw getError(errors.EXTENDS_NO_SRC);
@@ -41,10 +38,15 @@ function handleExtendsNodes(tree, options) {
 
         const layoutPath = path.resolve(options.root, extendsNode.attrs.src);
         const layoutHtml = fs.readFileSync(layoutPath, options.encoding);
-        let layoutTree = handleExtendsNodes(applyPluginsToTree(parseToPostHtml(layoutHtml), options.plugins), options);
+        let layoutTree = handleExtendsNodes(applyPluginsToTree(parseToPostHtml(layoutHtml), options.plugins), options, messages);
 
         extendsNode.tag = false;
         extendsNode.content = mergeExtendsAndLayout(layoutTree, extendsNode);
+        messages.push({
+            type: 'dependency',
+            file: layoutPath,
+            from: options.from
+        });
 
         return extendsNode;
     });

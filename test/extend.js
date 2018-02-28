@@ -202,6 +202,55 @@ describe('Extend', () => {
     });
 });
 
+describe('Messages', () => {
+    it('should have proper `result` structure', () => {
+        mfs.writeFileSync('./layout.html', `
+            <head><block name="head">head</block></head>
+            <body><block name="body">body</block></body>
+        `);
+
+        return init(
+            `
+                <extends src="layout.html">
+                    <block name="head"><title>hello world!</title></block>
+                    <block name="body">Some body content</block>
+                </extends>
+            `,
+            {},
+            (result) => expect(result).toEqual({
+                html: result.html,
+                tree: result.tree,
+                messages: result.messages
+            })
+        );
+
+    });
+
+    it('should have proper element within `messages`', () => {
+        const fileName = 'layout.html';
+        const filePath = `./${fileName}`;
+
+        mfs.writeFileSync(filePath, `
+            <head><block name="head">head</block></head>
+            <body><block name="body">body</block></body>
+        `);
+
+        return init(`
+            <extends src="${fileName}">
+                <block name="head"><title>hello world!</title></block>
+                <block name="body">Some body content</block>
+            </extends>
+        `, {
+            from: 'from'
+        }, (result) => expect(result.messages[0]).toEqual({
+            type: 'dependency',
+            file: path.resolve(filePath),
+            from: 'from'
+        }));
+
+    });
+});
+
 
 function assertError(promise, expectedErrorMessage) {
     return promise
@@ -210,10 +259,12 @@ function assertError(promise, expectedErrorMessage) {
 }
 
 
-function init(html, options = {}) {
+function init(html, options = {}, callback) {
+    const fn = typeof callback === 'function' ? callback : (result => cleanHtml(result.html));
+
     return posthtml([extend(options)])
         .process(html)
-        .then(result => cleanHtml(result.html));
+        .then(fn);
 }
 
 
