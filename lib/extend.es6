@@ -30,8 +30,6 @@ export default (options = {}) => {
     };
 };
 
-const api = new Api();
-
 function handleExtendsNodes(tree, options, messages) {
     match.call(applyPluginsToTree(tree, options.plugins), {tag: 'extends'}, extendsNode => {
         if (! extendsNode.attrs || ! extendsNode.attrs.src) {
