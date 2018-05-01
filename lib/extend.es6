@@ -19,11 +19,14 @@ export default (options = {}) => {
         tree = handleExtendsNodes(tree, options, tree.messages);
 
         const blockNodes = getBlockNodes(tree);
+        let blockTree;
+
         for (let blockName of Object.keys(blockNodes)) {
             let blockNode = blockNodes[blockName];
             blockNode.tag = false;
-            blockNode.content = blockNode.content || [];
+            blockTree = blockNode.content = blockNode.content || [];
             blockNodes[blockName] = blockNode;
+            trimTree(blockTree);
         }
 
         return tree;
@@ -31,6 +34,26 @@ export default (options = {}) => {
 };
 
 const api = new Api();
+
+function trimTree(tree) {
+    let firstNode = tree[0];
+    let lastNode = tree[tree.length - 1];
+
+    if (typeof firstNode === 'string') {
+        tree[0] = firstNode = firstNode.replace(/^\s+/, '');
+
+        // make first and last node refer to the same string if they are the same node
+        if (tree.length === 1) {
+            lastNode = firstNode;
+        }
+    }
+
+    if (typeof lastNode === 'string') {
+        tree[tree.length - 1] = lastNode = lastNode.replace(/\s+$/, '');
+    }
+
+    return tree;
+}
 
 function handleExtendsNodes(tree, options, messages) {
     api.match.call(applyPluginsToTree(tree, options.plugins), {tag: 'extends'}, extendsNode => {
@@ -41,6 +64,8 @@ function handleExtendsNodes(tree, options, messages) {
         const layoutPath = path.resolve(options.root, extendsNode.attrs.src);
         const layoutHtml = fs.readFileSync(layoutPath, options.encoding);
         let layoutTree = handleExtendsNodes(applyPluginsToTree(parseToPostHtml(layoutHtml), options.plugins), options, messages);
+
+        trimTree(layoutTree);
 
         extendsNode.tag = false;
         extendsNode.content = mergeExtendsAndLayout(layoutTree, extendsNode);
@@ -72,11 +97,11 @@ function mergeExtendsAndLayout(layoutTree, extendsNode) {
         }
 
         let layoutBlockNode = layoutBlockNodes[layoutBlockName];
-        layoutBlockNode.content = mergeContent(
+        layoutBlockNode.content = trimTree(mergeContent(
             extendsBlockNode.content,
             layoutBlockNode.content,
             getBlockType(extendsBlockNode)
-        );
+        ));
 
         delete extendsBlockNodes[layoutBlockName];
     }

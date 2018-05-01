@@ -16,6 +16,14 @@ let mfs = {
         this._files[fullPath] = content;
     }
 };
+const join = require('path').join;
+const readSync = require('fs').readFileSync;
+const fixture = (file) => {
+    return readSync(join(__dirname, 'fixtures', `${file}.html`), 'utf8');
+};
+const result = (file) => {
+    return readSync(join(__dirname, 'expect', `${file}.html`), 'utf8');
+};
 
 const extend = proxyquire('../lib/extend', {
     fs: mfs
@@ -199,6 +207,15 @@ describe('Extend', () => {
             init('<extends src="layout.html"><block name="head"></block></extends>'),
             '[posthtml-extend] Unexpected block "head"'
         );
+    });
+
+    it('should remove all whitespace at the start/end of the first/last text node', () => {
+        mfs.writeFileSync( './base.html', fixture('base_trim-whitespace'));
+        mfs.writeFileSync( './layout.html', fixture('layout_trim-whitespace'));
+
+        return init(fixture('test_trim-whitespace')).then(html => {
+            expect(html).toBe(result('result_trim-whitespace'));
+        });
     });
 });
 
