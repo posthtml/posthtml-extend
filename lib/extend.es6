@@ -15,6 +15,7 @@ export default (options = {}) => {
         options.encoding = options.encoding || 'utf8';
         options.root = options.root || './';
         options.plugins = options.plugins || [];
+        options.strict = Object.prototype.hasOwnProperty.call(options, 'strict') ? !!options.strict : true;
 
         tree = handleExtendsNodes(tree, options, tree.messages);
 
@@ -41,7 +42,7 @@ function handleExtendsNodes(tree, options, messages) {
         let layoutTree = handleExtendsNodes(applyPluginsToTree(parseToPostHtml(layoutHtml), options.plugins), options, messages);
 
         extendsNode.tag = false;
-        extendsNode.content = mergeExtendsAndLayout(layoutTree, extendsNode);
+        extendsNode.content = mergeExtendsAndLayout(layoutTree, extendsNode, options.strict);
         messages.push({
             type: 'dependency',
             file: layoutPath,
@@ -59,7 +60,7 @@ function applyPluginsToTree(tree, plugins) {
 }
 
 
-function mergeExtendsAndLayout(layoutTree, extendsNode) {
+function mergeExtendsAndLayout(layoutTree, extendsNode, strictNames) {
     const layoutBlockNodes = getBlockNodes(layoutTree);
     const extendsBlockNodes = getBlockNodes(extendsNode.content);
 
@@ -79,8 +80,10 @@ function mergeExtendsAndLayout(layoutTree, extendsNode) {
         delete extendsBlockNodes[layoutBlockName];
     }
 
-    for (let extendsBlockName of Object.keys(extendsBlockNodes)) {
-        throw getError(errors.UNEXPECTED_BLOCK, extendsBlockName);
+    if (strictNames) {
+        for (let extendsBlockName of Object.keys(extendsBlockNodes)) {
+            throw getError(errors.UNEXPECTED_BLOCK, extendsBlockName);
+        }
     }
 
     return layoutTree;
