@@ -200,6 +200,29 @@ describe('Extend', () => {
             '[posthtml-extend] Unexpected block "head"'
         );
     });
+
+
+    it('should not throw an error for an unexpected <block> if `strict` is false', () => {
+        mfs.writeFileSync('./layout.html', '<h1>Welcome to 3 Pages!</h1><block name="body"></block>');
+        mfs.writeFileSync(
+            './page1.html',
+            `<extends src="layout.html">
+                <block name="body">
+                    <form name="login">
+                        <block name="submit-button">
+                            <input type="submit" disabled="disabled" />
+                        </block>
+                    </form>
+                </block>
+            </extends>`
+        );
+
+        const page3 = '<extends src="page1.html"><block name="submit-button"><input type="submit" /></block></extends>';
+        const want = '<h1>Welcome to 3 Pages!</h1><form name="login"><input type="submit"></form>';
+
+        return init(page3, { strict: false })
+            .then(html => expect(html).toBe(want));
+    });
 });
 
 describe('Messages', () => {
