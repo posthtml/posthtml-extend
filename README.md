@@ -32,10 +32,10 @@ In the example the blocks `title` and `content` will be replaced and
 the block `footer` will remain unchanged:
 ```js
 var posthtml = require('posthtml');
-var html = '<extends src="base.html">' +
-               '<block name="title">How to use posthtml-extend</block>' +
-               '<block name="content">Read the documentation</block>'
-           '</extends>';
+var html = `<extends src="base.html">
+      <block name="title">How to use posthtml-extend</block>
+      <block name="content">Read the documentation</block>
+  </extends>`;
 
 posthtml([require('posthtml-extend')({
     encoding: 'utf8', // Parent template encoding (default: 'utf8')
@@ -64,11 +64,11 @@ The final HTML will be:
 It's also possible to append and prepend block's content:
 ```js
 var posthtml = require('posthtml');
-var html = '<extends src="base.html">' +
-               '<block name="title" type="prepend">How to use posthtml-extend</block>' +
-               '<block name="content">Read the documentation</block>' +
-               '<block name="footer" type="append">— 2016</block>'
-           '</extends>';
+var html = `<extends src="base.html">
+      <block name="title" type="prepend">How to use posthtml-extend</block>
+      <block name="content">Read the documentation</block>
+      <block name="footer" type="append">— 2016</block>
+  </extends>`;
 
 posthtml([require('posthtml-extend')()]).process(html).then(function (result) {
     console.log(result.html);
