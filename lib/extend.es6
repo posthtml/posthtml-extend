@@ -16,10 +16,12 @@ export default (options = {}) => {
         options.root = options.root || './';
         options.plugins = options.plugins || [];
         options.strict = Object.prototype.hasOwnProperty.call(options, 'strict') ? !!options.strict : true;
+        options.slotTagName = options.slotTagName || 'block';
+        options.fillTagName = options.fillTagName || 'block';
 
         tree = handleExtendsNodes(tree, options, tree.messages);
 
-        const blockNodes = getBlockNodes(tree);
+        const blockNodes = getBlockNodes(tree, options.slotTagName);
         for (let blockName of Object.keys(blockNodes)) {
             let blockNode = blockNodes[blockName];
             blockNode.tag = false;
@@ -42,7 +44,7 @@ function handleExtendsNodes(tree, options, messages) {
         let layoutTree = handleExtendsNodes(applyPluginsToTree(parseToPostHtml(layoutHtml), options.plugins), options, messages);
 
         extendsNode.tag = false;
-        extendsNode.content = mergeExtendsAndLayout(layoutTree, extendsNode, options.strict);
+        extendsNode.content = mergeExtendsAndLayout(layoutTree, extendsNode, options.strict, options.slotTagName, options.fillTagName);
         messages.push({
             type: 'dependency',
             file: layoutPath,
@@ -60,13 +62,13 @@ function applyPluginsToTree(tree, plugins) {
 }
 
 
-function mergeExtendsAndLayout(layoutTree, extendsNode, strictNames) {
-    const layoutBlockNodes = getBlockNodes(layoutTree);
-    const extendsBlockNodes = getBlockNodes(extendsNode.content);
+function mergeExtendsAndLayout(layoutTree, extendsNode, strictNames, slotTagName, fillTagName) {
+    const layoutBlockNodes = getBlockNodes(layoutTree, slotTagName);
+    const extendsBlockNodes = getBlockNodes(extendsNode.content, fillTagName);
 
     for (let layoutBlockName of Object.keys(layoutBlockNodes)) {
         let extendsBlockNode = extendsBlockNodes[layoutBlockName];
-        if (! extendsBlockNode) {
+        if (!extendsBlockNode) {
             continue;
         }
 
@@ -123,10 +125,10 @@ function getBlockType(blockNode) {
 }
 
 
-function getBlockNodes(content = []) {
+function getBlockNodes(content = [], tag) {
     let blockNodes = {};
 
-    match.call(content, {tag: 'block'}, node => {
+    match.call(content, {tag}, node => {
         if (! node.attrs || ! node.attrs.name) {
             throw getError(errors.BLOCK_NO_NAME);
         }
