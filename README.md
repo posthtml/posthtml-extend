@@ -154,3 +154,55 @@ const options = { root, strict: false };
 
 posthtml([extends(options)]).then(result => console.log(result.html));
 ```
+
+### slot/fill
+
+Tag names used to match a block with content with a block for inserting content. Default `<block>`
+
+`base.html`
+```xml
+<html>
+    <head>
+        <title><slot name="title"> — Github</slot></title>
+    </head>
+
+    <body>
+        <div class="content">
+           <slot name="content"></slot>
+        </div>
+        <footer>
+            <slot name="footer">footer content</slot>
+        </footer>
+    </body>
+</html>
+```
+
+```js
+var posthtml = require('posthtml');
+var html = `<extends src="base.html">
+      <fill name="title">How to use posthtml-extend</fill>
+      <fill name="content">Read the documentation</fill>
+  </extends>`;
+
+posthtml([require('posthtml-extend')({
+    slotTagName: 'slot',
+    fillTagName: 'fill'
+})]).process(html).then(function (result) {
+    console.log(result.html);
+});
+```
+
+The final HTML will be:
+```xml
+<html>
+    <head>
+        <title>How to use posthtml-extend</title>
+    </head>
+
+    <body>
+        <div class="content">Read the documentation</div>
+        <footer>footer content</footer>
+    </body>
+</html>
+```
+
