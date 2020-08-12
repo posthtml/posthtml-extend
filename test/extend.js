@@ -60,6 +60,37 @@ describe('Extend', () => {
         });
     });
 
+    it('should extend layout, change <block> to <slot> and <fill>', () => {
+        mfs.writeFileSync('./layout.html', `
+            <head><slot name="head">head</slot></head>
+            <body><slot name="body">body</slot></body>
+            <sidebar><slot name="sidebar"></slot></sidebar>
+            <div><slot name="ad">ad</slot></div>
+            <footer><slot name="footer">footer</slot></footer>
+        `);
+
+        const options = {
+            slotTagName: 'slot',
+            fillTagName: 'fill',
+        };
+
+        return init(`
+            <extends src="layout.html">
+                <fill name="ad"></fill>
+                <fill name="head"><title>hello world!</title></fill>
+                <fill name="body">Some body content</fill>
+            </extends>
+        `, options).then(html => {
+            expect(html).toBe(cleanHtml(`
+                <head><title>hello world!</title></head>
+                <body>Some body content</body>
+                <sidebar></sidebar>
+                <div></div>
+                <footer>footer</footer>
+            `));
+        });
+    });
+
     it('should extend layout with plugin', () => {
         mfs.writeFileSync('./layout.html', `
             <block name="content"></block>
