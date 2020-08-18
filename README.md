@@ -206,3 +206,38 @@ The final HTML will be:
 </html>
 ```
 
+### tagName
+
+Type: `string`\
+Default: `extends`
+
+The tag name to use when extending.
+
+```js
+var posthtml = require('posthtml');
+var html = `<layout src="base.html">
+    <block name="title">Using a custom tag name</block>
+    <block name="content">Read the documentation</block>
+</layout>`;
+
+posthtml([require('posthtml-extend')({
+    tagName: 'layout',
+})]).process(html).then(function (result) {
+    console.log(result.html);
+});
+```
+
+The final HTML will be:
+
+```html
+<html>
+    <head>
+        <title>Using a custom tag name</title>
+    </head>
+
+    <body>
+        <div class="content">Read the documentation</div>
+        <footer>footer content</footer>
+    </body>
+</html>
+```

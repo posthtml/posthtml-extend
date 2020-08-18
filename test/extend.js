@@ -117,6 +117,26 @@ describe('Extend', () => {
         });
     });
 
+    it('should extend layout using a custom tag name', () => {
+        mfs.writeFileSync('./layout.html', `
+            <head><block name="head">head</block></head>
+            <body><block name="body">body</block></body>
+        `);
+
+        return init(
+            `<layout src="layout.html">
+                <block name="head"><title>hello world!</title></block>
+                <block name="body">Some body content</block>
+            </layout>`,
+            {
+                tagName: 'layout'
+            }).then(html => {
+            expect(html).toBe(cleanHtml(`
+                    <head><title>hello world!</title></head>
+                    <body>Some body content</body>
+            `));
+        });
+    });
 
     it('should extend inherited layout', () => {
         mfs.writeFileSync('./base.html', `

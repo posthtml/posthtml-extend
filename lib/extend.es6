@@ -18,6 +18,7 @@ export default (options = {}) => {
         options.strict = Object.prototype.hasOwnProperty.call(options, 'strict') ? !!options.strict : true;
         options.slotTagName = options.slotTagName || 'block';
         options.fillTagName = options.fillTagName || 'block';
+        options.tagName = options.tagName || 'extends';
 
         tree = handleExtendsNodes(tree, options, tree.messages);
 
@@ -34,7 +35,7 @@ export default (options = {}) => {
 };
 
 function handleExtendsNodes(tree, options, messages) {
-    match.call(applyPluginsToTree(tree, options.plugins), {tag: 'extends'}, extendsNode => {
+    match.call(applyPluginsToTree(tree, options.plugins), {tag: options.tagName}, extendsNode => {
         if (! extendsNode.attrs || ! extendsNode.attrs.src) {
             throw getError(errors.EXTENDS_NO_SRC);
         }
