@@ -92,9 +92,15 @@ The final HTML will be:
 
 ### encoding
 
-The encoding of the parent template. Default: "utf8".
+Type: `string`\
+Default: `utf8`
+
+The encoding of the parent template.
 
 ### plugins
+
+Type: `array`\
+Default: `[]`
 
 You can include [other PostHTML plugins](http://posthtml.github.io/posthtml-plugins/) in your templates.
 Here is an example of using [posthtml-expressions](https://github.com/posthtml/posthtml-expressions), which allows to use variables and conditions:
@@ -136,17 +142,23 @@ The final HTML will be:
 
 ### root
 
-The path to the root template directory. Default: "./".
+Type: `string`\
+Default: `./`
+
+The path to the root template directory.
 
 ### strict
 
-Whether the plugin should disallow undeclared block names. Default: true.
+Type: `boolean`\
+Default: `true`
 
-By default, posthtml-extend raises an exception if an undeclared block name is encountered. This can be useful for troubleshooting (i.e. detecting typos in block names), but
+Whether the plugin should disallow undeclared block names.
+
+By default, the plugin raises an exception if an undeclared block name is encountered. This can be useful for troubleshooting (i.e. detecting typos in block names), but
 there are cases where "forward declaring" a block name as an extension point for downstream templates is useful, so this restriction can be lifted by setting the `strict`
 option to a false value:
 
-```javascript
+```js
 const extend = require('posthtml-extend');
 
 const root = './src/html';
@@ -157,7 +169,10 @@ posthtml([extends(options)]).then(result => console.log(result.html));
 
 ### slot/fill
 
-Tag names used to match a block with content with a block for inserting content. Default `<block>`
+Type: `string`\
+Default: `block`
+
+Tag names used to match a content block with a block for inserting content.
 
 `base.html`
 ```xml
@@ -187,9 +202,7 @@ var html = `<extends src="base.html">
 posthtml([require('posthtml-extend')({
     slotTagName: 'slot',
     fillTagName: 'fill'
-})]).process(html).then(function (result) {
-    console.log(result.html);
-});
+})]).process(html).then(result => console.log(result.html));
 ```
 
 The final HTML will be:
@@ -206,3 +219,36 @@ The final HTML will be:
 </html>
 ```
 
+### tagName
+
+Type: `string`\
+Default: `extends`
+
+The tag name to use when extending.
+
+```js
+var posthtml = require('posthtml');
+var html = `<layout src="base.html">
+    <block name="title">Using a custom tag name</block>
+    <block name="content">Read the documentation</block>
+</layout>`;
+
+posthtml([require('posthtml-extend')({
+    tagName: 'layout',
+})]).process(html).then(result => console.log(result.html));
+```
+
+The final HTML will be:
+
+```html
+<html>
+    <head>
+        <title>Using a custom tag name</title>
+    </head>
+
+    <body>
+        <div class="content">Read the documentation</div>
+        <footer>footer content</footer>
+    </body>
+</html>
+```
