@@ -1,6 +1,6 @@
 {
   "name": "posthtml-extend",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Templates extending (Jade-like)",
   "main": "index.js",
   "author": "Kirill Maltsev <maltsevkirill@gmail.com>",
