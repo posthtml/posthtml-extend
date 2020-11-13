@@ -164,7 +164,7 @@ const extend = require('posthtml-extend');
 const root = './src/html';
 const options = { root, strict: false };
 
-posthtml([extends(options)]).then(result => console.log(result.html));
+posthtml([extend(options)]).then(result => console.log(result.html));
 ```
 
 ### slot/fill
