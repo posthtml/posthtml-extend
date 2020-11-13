@@ -15,5 +15,8 @@
         "mangle": false
       }
     ]
+  ],
+  "plugins": [
+    "add-module-exports"
   ]
 }
