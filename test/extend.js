@@ -17,7 +17,7 @@ let mfs = {
     }
 };
 
-const extend = proxyquire('../lib/extend', {
+const extend = proxyquire('../src', {
     fs: mfs
 }).default;
 

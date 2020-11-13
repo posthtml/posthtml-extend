@@ -1,0 +1,19 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": 10
+        }
+      }
+    ],
+    [
+      "minify",
+      {
+        "removeUndefined": false,
+        "mangle": false
+      }
+    ]
+  ]
+}
