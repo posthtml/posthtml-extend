@@ -19,7 +19,7 @@ const mfs = {
 
 const extend = proxyquire('../src', {
   fs: mfs
-}).default;
+});
 
 describe('Extend', () => {
   beforeEach(() => {
