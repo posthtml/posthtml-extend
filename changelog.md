@@ -1,5 +1,14 @@
+## 0.6.0 (2020-11-24)
+
+* build(deps): bump posthtml from 0.13.4 to 0.15.0 ([97bd03e](https://github.com/posthtml/posthtml-extend/commit/97bd03e))
+* build(deps): bump posthtml-parser from 0.5.2 to 0.6.0 ([83a9994](https://github.com/posthtml/posthtml-extend/commit/83a9994))
+* Update funding.yml ([6c144ca](https://github.com/posthtml/posthtml-extend/commit/6c144ca))
+
+
+
 ## <small>0.5.2 (2020-11-13)</small>
 
+* 0.5.2 ([861ad7b](https://github.com/posthtml/posthtml-extend/commit/861ad7b))
 * test: fix require extend ([1ccca5c](https://github.com/posthtml/posthtml-extend/commit/1ccca5c))
 * ci: drop windows ([ce69a54](https://github.com/posthtml/posthtml-extend/commit/ce69a54))
 * docs: fix typo ([e252a69](https://github.com/posthtml/posthtml-extend/commit/e252a69))

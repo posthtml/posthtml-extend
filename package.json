@@ -1,6 +1,6 @@
 {
   "name": "posthtml-extend",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Templates extending (Jade-like)",
   "license": "MIT",
   "repository": "posthtml/posthtml-extend",
