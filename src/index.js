@@ -41,8 +41,8 @@ function handleExtendsNodes(tree, options, messages) {
     }
 
     try {
-      let data = extendsNode.attrs.data ? JSON.parse(extendsNode.attrs.data) : {};
-      options.expressions.locals = {...options.expressions.locals, ...data};
+      let locals = extendsNode.attrs.locals ? JSON.parse(extendsNode.attrs.locals) : {};
+      options.expressions.locals = {...options.expressions.locals, ...locals};
       options.plugins.push(expressions(options.expressions));
     } catch (e) {}
 

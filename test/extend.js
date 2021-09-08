@@ -121,7 +121,7 @@ describe('Extend', () => {
         `);
 
     return init(
-      `<extends src="layout.html" data='{"bodyclass": "home"}'>
+      `<extends src="layout.html" locals='{"bodyclass": "home"}'>
                 <block name="head"><title>hello world!</title></block>
                 <block name="body">Some body content</block>
             </extends>`,
