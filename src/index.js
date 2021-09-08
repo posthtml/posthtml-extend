@@ -40,9 +40,11 @@ function handleExtendsNodes(tree, options, messages) {
       throw getError(errors.EXTENDS_NO_SRC);
     }
 
-    let data = extendsNode.attrs.data ? JSON.parse(extendsNode.attrs.data) : {};
-    options.expressions.locals = {...options.expressions.locals, ...data};
-    options.plugins.push(expressions(options.expressions));
+    try {
+      let data = extendsNode.attrs.data ? JSON.parse(extendsNode.attrs.data) : {};
+      options.expressions.locals = {...options.expressions.locals, ...data};
+      options.plugins.push(expressions(options.expressions));
+    } catch (e) {}
 
     const layoutPath = path.resolve(options.root, extendsNode.attrs.src);
     const layoutHtml = fs.readFileSync(layoutPath, options.encoding);
