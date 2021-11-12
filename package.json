@@ -29,6 +29,7 @@
     "template"
   ],
   "dependencies": {
+    "deepmerge": "^4.2.2",
     "posthtml": "^0.15.0",
     "posthtml-parser": "^0.6.0"
   },
