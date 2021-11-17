@@ -1,8 +1,21 @@
+## <small>0.6.1 (2021-11-17)</small>
+
+* fix: after update dep dev ([efe15d7](https://github.com/posthtml/posthtml-extend/commit/efe15d7))
+* fix: change name of variable from data to locals ([26f260c](https://github.com/posthtml/posthtml-extend/commit/26f260c))
+* fix: refactor merging of locals ([bbc8856](https://github.com/posthtml/posthtml-extend/commit/bbc8856))
+* fix: wrap merging of locals in try catch ([e78cc33](https://github.com/posthtml/posthtml-extend/commit/e78cc33))
+* build: update dep dev ([91166c1](https://github.com/posthtml/posthtml-extend/commit/91166c1))
+* build(deps): bump lodash from 4.17.20 to 4.17.21 ([f6bad74](https://github.com/posthtml/posthtml-extend/commit/f6bad74))
+* feat: pass data to layout ([bc6ca77](https://github.com/posthtml/posthtml-extend/commit/bc6ca77))
+
+
+
 ## 0.6.0 (2020-11-24)
 
+* 0.6.0 ([24fce9c](https://github.com/posthtml/posthtml-extend/commit/24fce9c))
+* Update funding.yml ([6c144ca](https://github.com/posthtml/posthtml-extend/commit/6c144ca))
 * build(deps): bump posthtml from 0.13.4 to 0.15.0 ([97bd03e](https://github.com/posthtml/posthtml-extend/commit/97bd03e))
 * build(deps): bump posthtml-parser from 0.5.2 to 0.6.0 ([83a9994](https://github.com/posthtml/posthtml-extend/commit/83a9994))
-* Update funding.yml ([6c144ca](https://github.com/posthtml/posthtml-extend/commit/6c144ca))
 
 
 
