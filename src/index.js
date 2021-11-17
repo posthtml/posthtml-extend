@@ -2,7 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import {format} from 'util';
 import parseToPostHtml from 'posthtml-parser';
+import expressions from 'posthtml-expressions';
 import {match} from 'posthtml/lib/api';
+import merge from 'deepmerge';
 
 const errors = {
   EXTENDS_NO_SRC: '<extends> has no "src"',
@@ -18,6 +20,7 @@ const extend = (options = {}) => tree => {
   options.slotTagName = options.slotTagName || 'block';
   options.fillTagName = options.fillTagName || 'block';
   options.tagName = options.tagName || 'extends';
+  options.expressions = options.expressions || {locals: {}};
 
   tree = handleExtendsNodes(tree, options, tree.messages);
 
@@ -37,6 +40,15 @@ function handleExtendsNodes(tree, options, messages) {
     if (!extendsNode.attrs || !extendsNode.attrs.src) {
       throw getError(errors.EXTENDS_NO_SRC);
     }
+
+    let locals = {};
+    if (extendsNode.attrs.locals) {
+      try {
+        locals = JSON.parse(extendsNode.attrs.locals);
+      } catch {}
+    }
+    options.expressions.locals = merge(options.expressions.locals, locals);
+    options.plugins.push(expressions(options.expressions));
 
     const layoutPath = path.resolve(options.root, extendsNode.attrs.src);
     const layoutHtml = fs.readFileSync(layoutPath, options.encoding);

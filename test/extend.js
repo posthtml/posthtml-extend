@@ -114,6 +114,25 @@ describe('Extend', () => {
     });
   });
 
+  it('should extend layout with data', () => {
+    mfs.writeFileSync('./layout.html', `
+            <head><block name="head">head</block></head>
+            <body class="{{ bodyclass }}"><block name="body">body</block></body>
+        `);
+
+    return init(
+      `<extends src="layout.html" locals='{"bodyclass": "home"}'>
+                <block name="head"><title>hello world!</title></block>
+                <block name="body">Some body content</block>
+            </extends>`,
+      ).then(html => {
+        expect(html).toBe(cleanHtml(`
+                    <head><title>hello world!</title></head>
+                    <body class="home">Some body content</body>
+        `));
+    });
+  });
+
   it('should extend layout using a custom tag name', () => {
     mfs.writeFileSync('./layout.html', `
             <head><block name="head">head</block></head>

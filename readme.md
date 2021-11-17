@@ -88,6 +88,53 @@ The final HTML will be:
 </html>
 ```
 
+### Pass data to layouts
+
+In addition to normal html content you can also pass data as a json object to your layout file. To do this add a `locals` attribute to your `<extend>` and pass a json string.
+
+Like this:
+
+```js
+    var posthtml = require('posthtml');
+    var html = `<extends src="base.html" locals='{"bodyclass": "home"}'>
+        <block name="content">Read the documentation</block>
+    </extends>`;
+   
+    posthtml([require('posthtml-extend')()]).process(html).then(function (result) {
+        console.log(result.html);
+    });
+```
+
+Now you can easily access your data inside of your `base.html`: 
+
+```xml
+<html>
+    <head>
+        <title>How to use posthtml-extend — Github</title>
+    </head>
+
+    <body class="{{ bodyclass }}">
+        <div class="content">
+           <block name="content"></block>
+        </div>
+    </body>
+</html>
+```
+
+The final HTML will be:
+```xml
+<html>
+    <head>
+        <title>How to use posthtml-extend — Github</title>
+    </head>
+    <body class="home">
+        <div class="content">Read the documentation</div>
+    </body>
+</html>
+```
+
+This behaviour can be customized with the option [`expressions`](#expressions).
+
 ## Options
 
 ### encoding
@@ -252,3 +299,13 @@ The final HTML will be:
     </body>
 </html>
 ```
+
+### expressions
+
+Type: `object`\
+Default: `{}`
+
+This option accepts an object to configure `posthtml-expressions`.
+You can pre-set locals or customize the delimiters for example.
+
+Head over to the [full documentation](https://github.com/posthtml/posthtml-expressions#options) for information on every available option.
