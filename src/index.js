@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import {format} from 'util';
-import parseToPostHtml from 'posthtml-parser';
+import { parser as parseToPostHtml } from 'posthtml-parser';
 import expressions from 'posthtml-expressions';
 import {match} from 'posthtml/lib/api';
 import merge from 'deepmerge';
