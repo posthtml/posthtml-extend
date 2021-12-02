@@ -47,12 +47,13 @@ function handleExtendsNodes(tree, options, messages) {
         locals = JSON.parse(extendsNode.attrs.locals);
       } catch {}
     }
-    options.expressions.locals = merge(options.expressions.locals, locals);
-    options.plugins.push(expressions(options.expressions));
+
+    var options_expressions = merge(options.expressions, {locals});
+    var plugins = [...options.plugins, expressions(options_expressions)];
 
     const layoutPath = path.resolve(options.root, extendsNode.attrs.src);
     const layoutHtml = fs.readFileSync(layoutPath, options.encoding);
-    const layoutTree = handleExtendsNodes(applyPluginsToTree(parseToPostHtml(layoutHtml), options.plugins), options, messages);
+    const layoutTree = handleExtendsNodes(applyPluginsToTree(parseToPostHtml(layoutHtml), plugins), options, messages);
 
     extendsNode.tag = false;
     extendsNode.content = mergeExtendsAndLayout(layoutTree, extendsNode, options.strict, options.slotTagName, options.fillTagName);

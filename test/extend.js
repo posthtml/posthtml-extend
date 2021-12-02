@@ -154,6 +154,42 @@ describe('Extend', () => {
     });
   });
 
+  it('should accept locals in inherited layout', () => {
+    mfs.writeFileSync('./parent.html', `
+          <div class="parent">
+            <span>{{ parent_var }}</span>
+            <block name="content"></block>
+          </div>
+        `);
+
+    mfs.writeFileSync('./child.html', `
+            <div class="child">
+              <span>{{ child_var }}</span>
+              <block name="child_content"></block>
+            </div>
+        `);
+
+    return init(`
+            <extends src="parent.html" locals='{"parent_var":"parent var sample"}'>
+              <block name="content">
+                <extends src="child.html" locals='{"child_var":"child var sample"}'>
+                  <block name="child_content">child content example</block>
+                </extends>
+              </block>
+            </extends>
+        `, {strict: false}).then(html => {
+      expect(html).toBe(cleanHtml(`
+            <div class="parent">
+            <span>parent var sample</span>
+            <div class="child">
+              <span>child var sample</span>
+              child content example
+            </div>
+            </div>
+            `));
+    });
+  });
+
   it('should extend inherited layout', () => {
     mfs.writeFileSync('./base.html', `
             <html>
