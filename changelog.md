@@ -1,5 +1,18 @@
+## <small>0.6.2 (2021-12-07)</small>
+
+* following feedback and improving code ([2a4ea5c](https://github.com/posthtml/posthtml-extend/commit/2a4ea5c))
+* fix: locals in inherited layout ([4f33548](https://github.com/posthtml/posthtml-extend/commit/4f33548))
+* build(deps): bump handlebars from 4.7.6 to 4.7.7 ([d389748](https://github.com/posthtml/posthtml-extend/commit/d389748))
+* build(deps): bump hosted-git-info from 2.8.8 to 2.8.9 ([681eee3](https://github.com/posthtml/posthtml-extend/commit/681eee3))
+* build(deps): bump ini from 1.3.5 to 1.3.8 ([583e6bc](https://github.com/posthtml/posthtml-extend/commit/583e6bc))
+* build(deps): bump path-parse from 1.0.6 to 1.0.7 ([46d2bfc](https://github.com/posthtml/posthtml-extend/commit/46d2bfc))
+* build(deps): bump y18n from 4.0.0 to 4.0.3 ([bead193](https://github.com/posthtml/posthtml-extend/commit/bead193))
+
+
+
 ## <small>0.6.1 (2021-11-17)</small>
 
+* 0.6.1 ([e273918](https://github.com/posthtml/posthtml-extend/commit/e273918))
 * fix: after update dep dev ([efe15d7](https://github.com/posthtml/posthtml-extend/commit/efe15d7))
 * fix: change name of variable from data to locals ([26f260c](https://github.com/posthtml/posthtml-extend/commit/26f260c))
 * fix: refactor merging of locals ([bbc8856](https://github.com/posthtml/posthtml-extend/commit/bbc8856))
