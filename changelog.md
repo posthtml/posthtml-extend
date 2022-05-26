@@ -1,5 +1,15 @@
+## <small>0.6.3 (2022-05-26)</small>
+
+* build: update dep dev ([9c71846](https://github.com/posthtml/posthtml-extend/commit/9c71846))
+* ci: drop support node less 14 ([ea4fd97](https://github.com/posthtml/posthtml-extend/commit/ea4fd97))
+* feat: support for multiple blocks declaration in layout ([5101693](https://github.com/posthtml/posthtml-extend/commit/5101693))
+* test: add test for layout with multiple blocks ([75ba49b](https://github.com/posthtml/posthtml-extend/commit/75ba49b))
+
+
+
 ## <small>0.6.2 (2021-12-07)</small>
 
+* 0.6.2 ([7758092](https://github.com/posthtml/posthtml-extend/commit/7758092))
 * following feedback and improving code ([2a4ea5c](https://github.com/posthtml/posthtml-extend/commit/2a4ea5c))
 * fix: locals in inherited layout ([4f33548](https://github.com/posthtml/posthtml-extend/commit/4f33548))
 * build(deps): bump handlebars from 4.7.6 to 4.7.7 ([d389748](https://github.com/posthtml/posthtml-extend/commit/d389748))
