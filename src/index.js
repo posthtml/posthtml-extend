@@ -26,10 +26,12 @@ const extend = (options = {}) => tree => {
 
   const blockNodes = getBlockNodes(options.slotTagName, tree);
   for (const blockName of Object.keys(blockNodes)) {
-    const blockNode = blockNodes[blockName];
-    blockNode.tag = false;
-    blockNode.content = blockNode.content || [];
-    blockNodes[blockName] = blockNode;
+    const blockNodeList = blockNodes[blockName];
+    for (const blockNode of blockNodeList) {
+      blockNode.tag = false;
+      blockNode.content = blockNode.content || [];
+    }
+    blockNodes[blockName] = blockNodeList;
   }
 
   return tree;
@@ -81,17 +83,24 @@ function mergeExtendsAndLayout(layoutTree, extendsNode, strictNames, slotTagName
   const extendsBlockNodes = getBlockNodes(fillTagName, extendsNode.content);
 
   for (const layoutBlockName of Object.keys(layoutBlockNodes)) {
-    const extendsBlockNode = extendsBlockNodes[layoutBlockName];
+    const extendsBlockNodeList = extendsBlockNodes[layoutBlockName]
+    if (!extendsBlockNodeList) {
+      continue;
+    }
+    // pick up the last block node if multiple blocks are declared in `extends` node
+    const extendsBlockNode = extendsBlockNodeList[extendsBlockNodeList.length - 1];
     if (!extendsBlockNode) {
       continue;
     }
 
-    const layoutBlockNode = layoutBlockNodes[layoutBlockName];
-    layoutBlockNode.content = mergeContent(
-      extendsBlockNode.content,
-      layoutBlockNode.content,
-      getBlockType(extendsBlockNode)
-    );
+    const layoutBlockNodeList = layoutBlockNodes[layoutBlockName];
+    for (const layoutBlockNode of layoutBlockNodeList) {
+      layoutBlockNode.content = mergeContent(
+        extendsBlockNode.content,
+        layoutBlockNode.content,
+        getBlockType(extendsBlockNode)
+      );
+    }
 
     delete extendsBlockNodes[layoutBlockName];
   }
@@ -146,11 +155,21 @@ function getBlockNodes(tag, content = []) {
       throw getError(errors.BLOCK_NO_NAME);
     }
 
-    blockNodes[node.attrs.name] = node;
+    appendBlockNode(blockNodes, node)
     return node;
   });
 
   return blockNodes;
+}
+
+function appendBlockNode(blockNodes, node) {
+  const { name } = node.attrs
+  if (blockNodes[name] == null) {
+    blockNodes[name] = [node]
+  } else {
+    blockNodes[name].push(node)
+  }
+  return blockNodes
 }
 
 function getError(...rest) {

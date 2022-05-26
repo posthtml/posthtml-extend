@@ -261,6 +261,112 @@ describe('Extend', () => {
     });
   });
 
+  it('should extend layout with multiple blocks', () => {
+    mfs.writeFileSync('./layout.html', `
+            <div>
+                <block name="content"></block>
+                <hr>
+                <block name="content"></block>
+                <hr>
+                <block name="content"></block>
+            </div>
+        `)
+
+    return init(`
+            <extends src="layout.html">
+                <block name="content"><p>content</p></block>
+            </extends>
+        `).then(html => {
+      expect(html).toBe(cleanHtml(`
+          <div>
+              <p>content</p>
+              <hr>
+              <p>content</p>
+              <hr>
+              <p>content</p>
+          </div>
+      `))
+    });
+  });
+
+  it('should render the last <block> if multiple <block> tags with the same name are declared in <extends>', () => {
+    mfs.writeFileSync('./layout.html', `
+            <div>
+                <block name="content"></block>
+                <hr>
+                <block name="content"></block>
+                <hr>
+                <block name="content"></block>
+            </div>
+        `)
+
+    return init(`
+            <extends src="layout.html">
+                <block name="content"><p>1</p></block>
+                <block name="content"><p>2</p></block>
+                <block name="content"><p>3</p></block>
+            </extends>
+        `).then(html => {
+      expect(html).toBe(cleanHtml(`
+          <div>
+              <p>3</p>
+              <hr>
+              <p>3</p>
+              <hr>
+              <p>3</p>
+          </div>
+      `))
+    });
+  });
+
+  it('should extends layout multiple times', () => {
+    mfs.writeFileSync('./layout.html', `
+            <div>
+                <block name="content"></block>
+                <hr>
+                <block name="content"></block>
+                <hr>
+                <block name="content"></block>
+            </div>
+        `)
+
+    return init(`
+            <extends src="layout.html">
+                <block name="content"><p>1</p></block>
+            </extends>
+            <extends src="layout.html">
+                <block name="content"><p>2</p></block>
+            </extends>
+            <extends src="layout.html">
+                <block name="content"><p>3</p></block>
+            </extends>
+        `).then(html => {
+      expect(html).toBe(cleanHtml(`
+          <div>
+              <p>1</p>
+              <hr>
+              <p>1</p>
+              <hr>
+              <p>1</p>
+          </div>
+          <div>
+              <p>2</p>
+              <hr>
+              <p>2</p>
+              <hr>
+              <p>2</p>
+          </div>
+          <div>
+              <p>3</p>
+              <hr>
+              <p>3</p>
+              <hr>
+              <p>3</p>
+          </div>
+      `))
+    });
+  });
+
   it('should throw an error if <extends> has no "src"', () => {
     return assertError(
       init('<extends><block name="content"></block></extends>'),
