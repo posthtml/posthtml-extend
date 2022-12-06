@@ -50,8 +50,10 @@ function handleExtendsNodes(tree, options, messages) {
       } catch {}
     }
 
-    options.expressions.locals = merge(options.expressions.locals, locals);
-    const plugins = [...options.plugins, expressions(options.expressions)];
+    const plugins = [...options.plugins, expressions({
+      ...options.expressions,
+      locals: merge(options.expressions.locals, locals)
+    })];
 
     const layoutPath = path.resolve(options.root, extendsNode.attrs.src);
     const layoutHtml = fs.readFileSync(layoutPath, options.encoding);
