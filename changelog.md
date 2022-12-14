@@ -1,5 +1,13 @@
+## <small>0.6.4 (2022-12-14)</small>
+
+* fix: copy options.expressions into new object to not pollute locals ([b5a6dfe](https://github.com/posthtml/posthtml-extend/commit/b5a6dfe))
+* test: add test for options.expressions.locals pollution ([de0be4a](https://github.com/posthtml/posthtml-extend/commit/de0be4a))
+
+
+
 ## <small>0.6.3 (2022-05-26)</small>
 
+* 0.6.3 ([ccf454a](https://github.com/posthtml/posthtml-extend/commit/ccf454a))
 * build: update dep dev ([9c71846](https://github.com/posthtml/posthtml-extend/commit/9c71846))
 * ci: drop support node less 14 ([ea4fd97](https://github.com/posthtml/posthtml-extend/commit/ea4fd97))
 * feat: support for multiple blocks declaration in layout ([5101693](https://github.com/posthtml/posthtml-extend/commit/5101693))
