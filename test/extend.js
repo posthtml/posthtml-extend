@@ -426,6 +426,37 @@ describe('Extend', () => {
     return init(page3, {strict: false})
       .then(html => expect(html).toBe(want));
   });
+
+  /*
+    This plugin used to merge the locals from options.expressions.locals and the
+    "locals" attribute into the options.expressions.locals property. Arrays in
+    the attribute locals would be copied into options.expressions.locals and
+    when the plugin was called again they would be merged again, doubling all
+    array entries every time the plugin was called.
+  */
+  it('should not pollute options.expression.locals ', async () => {
+    mfs.writeFileSync('./base.html', `<div class="base">{{ list.join(", ") }}</div>`);
+
+    const options = {
+      expressions: {
+        locals: {}
+      }
+    };
+
+    const preHtml = `
+      <extends src="base.html" locals='{"list": ["One", "Two", "Three"]}'>
+      </extends>
+    `;
+    const postHtml = `<div class="base">One, Two, Three</div>`;
+
+    expect(await init(preHtml, options)).toBe(postHtml);
+    expect(options.expressions.locals).toStrictEqual({});
+    /*
+      Since the entries in "list" would have been merged with themselves, the
+      content would have been "One, Two, Three, One, Two, Three"
+    */
+    expect(await init(preHtml, options)).toBe(postHtml);
+  });
 });
 
 describe('Messages', () => {
