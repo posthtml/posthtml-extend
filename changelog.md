@@ -1,5 +1,13 @@
+## <small>0.6.5 (2022-12-14)</small>
+
+* build: fix dev expression, close #52 ([8d9ea9e](https://github.com/posthtml/posthtml-extend/commit/8d9ea9e)), closes [#52](https://github.com/posthtml/posthtml-extend/issues/52)
+* build: update dep dev ([e4bc6dd](https://github.com/posthtml/posthtml-extend/commit/e4bc6dd))
+
+
+
 ## <small>0.6.4 (2022-12-14)</small>
 
+* 0.6.4 ([82c2230](https://github.com/posthtml/posthtml-extend/commit/82c2230))
 * fix: copy options.expressions into new object to not pollute locals ([b5a6dfe](https://github.com/posthtml/posthtml-extend/commit/b5a6dfe))
 * test: add test for options.expressions.locals pollution ([de0be4a](https://github.com/posthtml/posthtml-extend/commit/de0be4a))
 
